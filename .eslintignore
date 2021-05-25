@@ -1,0 +1,9 @@
+/.idea/**
+/node_modules/**
+package-lock.json
+LICENSE.txt
+.gitignore
+.prettierignore
+README.md
+**/*.json
+
