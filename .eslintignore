@@ -1,5 +1,6 @@
 /.idea/**
 /node_modules/**
+/out/**
 package-lock.json
 LICENSE.txt
 .gitignore

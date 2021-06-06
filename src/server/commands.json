@@ -1,0 +1,35 @@
+{
+  "ping": {
+    "fields": {
+      "min": 0,
+      "max": 0
+    },
+    "options": {}
+  },
+  "set": {
+    "fields": {
+      "min": 1,
+      "max": 2,
+      "names": [
+        "key",
+        "value"
+      ]
+    },
+    "types": {
+      "integer": [1]
+    },
+    "options": {
+      "nx": {
+        "fields": 0,
+        "incompatible": ["xx"]
+      },
+      "xx": {
+        "fields": 0,
+        "incompatible": ["nx"]
+      },
+      "get": {
+        "fields": 0
+      }
+    }
+  }
+}
