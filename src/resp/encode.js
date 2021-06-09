@@ -4,5 +4,5 @@
  * @returns {respString} Encoded string
  */
 module.exports = function (data) {
-  return data;
+  return data.toString();
 };

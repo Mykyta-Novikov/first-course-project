@@ -4,5 +4,5 @@
  * @returns {respStructure} Parsed string
  */
 module.exports = function (respString) {
-  return respString.split(" ");
+  return respString.split(",");
 };

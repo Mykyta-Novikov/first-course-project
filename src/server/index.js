@@ -4,6 +4,9 @@ let RESP = require("./../resp");
 
 let server = net.createServer();
 
+if (!process.send)
+  throw new Error("Server process should be spawned with an with ICP channel.");
+
 let messageDataListener = (message) => {
   process.removeListener("message", messageDataListener);
   let messageData;

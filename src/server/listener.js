@@ -2,6 +2,7 @@ let RESP = require("./../resp");
 let parseRequest = require("./parse-request");
 let commandImplementations = {
   ping,
+  ...require("./crud"),
 };
 
 /**
@@ -16,14 +17,20 @@ function serverListener(connection) {
     if (!Array.isArray(request))
       throw new Error(`Request is not parsable RESP string: ${data}`);
 
+    let response;
     let command = parseRequest(request);
-    let response = commandImplementations[command.name](command);
+    try {
+      response = commandImplementations[command.name](command);
+    } catch (error) {
+      response = error;
+    }
     connection.write(RESP.encode(response));
+    connection.end();
   });
 }
 
 /**
- * Test command implementation that just sends a string in response.
+ * Test command controller that just sends a string in response.
  * @param {Command} command Does not contain any useful information;
  * @return {respStructure} Always the "PONG" string.
  */

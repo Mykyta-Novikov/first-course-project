@@ -27,8 +27,12 @@ function startInteractiveMode(commandArguments, globalArguments) {
 
   let stdin = readline.createInterface(process.stdin);
   stdin.addListener("line", (input) => {
-    command(input, null, context, () =>
-      process.stdout.write(`${context.host}:${context.port}> `)
+    command(input, null, context, (hadError) =>
+      process.stdout.write(
+        `${!hadError ? "Disconnected from " : ""}${context.host}:${
+          context.port
+        }> `
+      )
     );
   });
   stdin.addListener("SIGINT", () => stdin.removeAllListeners());

@@ -44,10 +44,14 @@ function processCommand(
     );
     if (interactiveContext) interactiveContext.connection = null;
   }
-  connection.addListener("error", console.error);
+
+  connection.addListener("error", (err) => {
+    console.error(err);
+    afterWrite(false);
+  });
   connection.addListener("data", (data) => {
     console.log(RESP.parse(data.toString()).join(" "));
-    if (afterWrite) afterWrite(data);
+    if (afterWrite) afterWrite(true);
 
     if (!interactiveContext) connection.end();
   });

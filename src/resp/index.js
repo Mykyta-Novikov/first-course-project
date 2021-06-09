@@ -1,5 +1,6 @@
 let parse = require("./parse");
 let encode = require("./encode");
+let { BulkString } = require("../types");
 
 /**
  * Parses a command into array of RESP BulkStrings.
@@ -7,12 +8,12 @@ let encode = require("./encode");
  * @returns {respStructure}
  */
 function command(command) {
-  return command;
+  return command.split(" ").map((value) => new BulkString(value));
 }
 
 /**
- *
- * @typedef {string|Error|Number|Array<respStructure>|null} respStructure All types that
+ * Object containing methods for processing RESP.
+ * @typedef {string|BulkString|Error|Number|Array<respStructure>|null} respStructure All types that
  * a RESP-encoded string can contain.
  * @typedef {string} respString String encoded in resp.
  * @type {{

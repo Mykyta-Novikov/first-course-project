@@ -28,10 +28,10 @@ class Token {
       return false;
 
     let checkFields = (token) =>
-      this.fields.length > commands[token.name].fields.max ||
-      this.fields.length < commands[token.name].fields.max;
+      this.fields.length >= commands[token.name].fields.min ||
+      this.fields.length <= commands[token.name].fields.max;
 
-    return !(checkFields(this) || this.subtokens.some(checkFields));
+    return checkFields(this) || this.subtokens.every(checkFields);
   }
 
   /**
@@ -41,10 +41,10 @@ class Token {
   castFields() {
     let checkType = (tokenName) => (field, index) => {
       let type = commands[tokenName].types
-        ? commands[tokenName].types.keys()[
-            commands[tokenName].types
-              .values()
-              .find((value) => value.contains(index))
+        ? Object.keys(commands[tokenName].types)[
+            Object.values(commands[tokenName].types).find((value) =>
+              value.contains(index)
+            )
           ]
         : "string";
 
@@ -79,6 +79,11 @@ class Token {
 
 /**
  * Class that represents parsed command with fields and options.
+ * @type {{
+ *   name: string,
+ *   fields: Object<string|number>,
+ *   options: Object<boolean|string|number>
+ * }}
  */
 class Command {
   /**
@@ -114,19 +119,22 @@ class Command {
  * @param {Array<string>} request
  */
 function parseRequest(request) {
-  request = request.map((value) => value.toLocaleLowerCase());
+  request = request.map((value) => value.toLowerCase());
 
   let command = request[0];
   if (!commands[command]) throw new Error("Command not recognized: " + command);
 
-  let optionNames = Object.keys(commands[command].options);
+  let optionNames = Object.keys(commands[command].options || {});
   let tokenIndexes = request
     .slice(1)
     .map((value, index) => ({ index, value }))
     .filter((string) => optionNames.includes(string.value))
     .map((string) => string.index);
 
-  let commandToken = new Token(command, request.slice(1, tokenIndexes[0]));
+  let commandToken = new Token(
+    command,
+    request.slice(1, tokenIndexes[0] || undefined)
+  );
   tokenIndexes.forEach((tokenIndex, index) =>
     commandToken.subtokens.push(
       new Token(

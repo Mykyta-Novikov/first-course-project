@@ -40,9 +40,9 @@ function startServer(commandArguments, globalArguments) {
       child.removeListener("message", loadingListener);
 
       console.log(
-        `Server started at ${globalArguments.host}:${globalArguments.port}`
+        `Server started at ${globalArguments.host.values[0]}:${globalArguments.port.values[0]}`
       );
-      if (parameters["no-interactive"]) interactive(null, globalArguments);
+      if (!parameters["no-interactive"]) interactive("", globalArguments);
     } else if (message.startsWith("error:"))
       throw new Error("Server not started: " + message.slice(6));
   };
